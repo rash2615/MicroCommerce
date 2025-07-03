@@ -6,11 +6,17 @@ import PeopleIcon from '@mui/icons-material/People';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import StoreIcon from '@mui/icons-material/Store';
 import GavelIcon from '@mui/icons-material/Gavel';
+import Layout from './components/Layout';
+import LandingPage from './pages/LandingPage';
 import CustomerPage from './pages/CustomerPage';
 import ProductPage from './pages/ProductPage';
 import OrderPage from './pages/OrderPage';
 
 const drawerWidth = 220;
+
+function Placeholder({ title }) {
+  return <div style={{ width: '100%', minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><h2>{title} (à venir)</h2></div>;
+}
 
 function App() {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -24,6 +30,18 @@ function App() {
 
   return (
     <Router>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/customers" element={<CustomerPage />} />
+          <Route path="/products" element={<ProductPage />} />
+          <Route path="/orders" element={<OrderPage />} />
+          <Route path="/contact" element={<Placeholder title="Contact" />} />
+          <Route path="/mentions-legales" element={<Placeholder title="Mentions légales" />} />
+          <Route path="/cgv" element={<Placeholder title="CGV" />} />
+          <Route path="*" element={<LandingPage />} />
+        </Routes>
+      </Layout>
       <Box sx={{ display: 'flex' }}>
         <AppBar position="fixed" sx={{ zIndex: 1300 }}>
           <Toolbar>
