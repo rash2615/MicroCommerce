@@ -1,18 +1,73 @@
-import React from 'react';
-import { Box, Typography, Button, Grid } from '@mui/material';
+import React, { useEffect, useRef, useState } from 'react';
+import { Box, Typography, Button, Grid, Fade, Slide } from '@mui/material';
 
 export default function LandingPage() {
+  // Parallax state
+  const [offsetY, setOffsetY] = useState(0);
+  const heroRef = useRef(null);
+  // Animation state
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    setShow(true);
+    const handleScroll = () => {
+      if (heroRef.current) {
+        const scrollY = window.scrollY;
+        setOffsetY(scrollY * 0.4); // Parallax ratio
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <Box sx={{ width: '100%', bgcolor: '#e3f2fd', minHeight: '100vh', pb: 6 }}>
-      {/* Hero section */}
-      <Box sx={{ width: '100%', minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', py: 8, background: 'linear-gradient(90deg, #1976d2 60%, #fff 100%)' }}>
-        <Typography variant="h2" fontWeight={800} color="#fff" gutterBottom align="center">
-          Bienvenue chez MicroCommerce
-        </Typography>
-        <Typography variant="h5" color="#fff" align="center" sx={{ maxWidth: 700, mb: 4 }}>
-          Votre boutique de confiance pour tous vos besoins en produits et services, avec une gestion moderne et transparente.
-        </Typography>
-        <Button variant="contained" size="large" sx={{ fontWeight: 700, bgcolor: '#fff', color: '#1976d2', ':hover': { bgcolor: '#e3f2fd' } }} href="#about">Découvrir</Button>
+      {/* Hero section avec parallax */}
+      <Box
+        ref={heroRef}
+        sx={{
+          width: '100%',
+          minHeight: '60vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'column',
+          py: 8,
+          position: 'relative',
+          overflow: 'hidden',
+          background: 'linear-gradient(90deg, #1976d2 60%, #fff 100%)',
+        }}
+      >
+        {/* Image de fond parallax */}
+        <Box
+          aria-hidden
+          sx={{
+            position: 'absolute',
+            top: -120 + offsetY,
+            left: 0,
+            width: '100%',
+            height: 400,
+            backgroundImage: 'url(https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=1200&q=80)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            opacity: 0.18,
+            zIndex: 0,
+            transition: 'top 0.2s',
+          }}
+        />
+        <Fade in={show} timeout={1200}>
+          <Typography variant="h2" fontWeight={800} color="#fff" gutterBottom align="center" sx={{ zIndex: 1 }}>
+            Bienvenue chez MicroCommerce
+          </Typography>
+        </Fade>
+        <Slide in={show} direction="up" timeout={1400}>
+          <Typography variant="h5" color="#fff" align="center" sx={{ maxWidth: 700, mb: 4, zIndex: 1 }}>
+            Votre boutique de confiance pour tous vos besoins en produits et services, avec une gestion moderne et transparente.
+          </Typography>
+        </Slide>
+        <Slide in={show} direction="up" timeout={1800}>
+          <Button variant="contained" size="large" sx={{ fontWeight: 700, bgcolor: '#fff', color: '#1976d2', ':hover': { bgcolor: '#e3f2fd' }, zIndex: 1 }} href="#about">Découvrir</Button>
+        </Slide>
       </Box>
       {/* À propos */}
       <Box id="about" sx={{ width: '100%', py: 8, px: { xs: 2, md: 8 }, bgcolor: '#fff' }}>
