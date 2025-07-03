@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Button, IconButton, Snackbar, Alert, Box } from '@mui/material';
+import { Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Button, IconButton, Snackbar, Alert, Box, InputAdornment } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
 
 const API_URL = 'http://localhost:8080/api/customers';
@@ -9,6 +10,7 @@ function CustomerPage() {
   const [customers, setCustomers] = useState([]);
   const [nom, setNom] = useState('');
   const [email, setEmail] = useState('');
+  const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
 
@@ -51,6 +53,12 @@ function CustomerPage() {
     }
   };
 
+  // Filtrage accessible et insensible à la casse
+  const filteredCustomers = customers.filter(c =>
+    c.nom.toLowerCase().includes(search.toLowerCase()) ||
+    c.email.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <Box>
       <Typography variant="h4" gutterBottom>Clients</Typography>
@@ -58,31 +66,52 @@ function CustomerPage() {
         <form onSubmit={handleAdd} style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
           <TextField label="Nom" value={nom} onChange={e => setNom(e.target.value)} required />
           <TextField label="Email" value={email} onChange={e => setEmail(e.target.value)} required type="email" />
-          <Button type="submit" variant="contained">Ajouter</Button>
+          <Button type="submit" variant="contained" sx={{ bgcolor: '#1976d2', color: '#fff', fontWeight: 700, ':hover': { bgcolor: '#115293' } }}>Ajouter</Button>
         </form>
       </Paper>
-      <TableContainer component={Paper}>
+      <TextField
+        fullWidth
+        variant="outlined"
+        placeholder="Rechercher un client par nom ou email..."
+        value={search}
+        onChange={e => setSearch(e.target.value)}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon aria-label="Rechercher" />
+            </InputAdornment>
+          ),
+        }}
+        sx={{ mb: 2, bgcolor: '#fff', borderRadius: 2, boxShadow: 1 }}
+        inputProps={{
+          'aria-label': 'Rechercher un client',
+          style: { color: '#222', fontWeight: 500 }
+        }}
+      />
+      <TableContainer component={Paper} sx={{ boxShadow: 2 }}>
         <Table>
           <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Nom</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell align="right">Actions</TableCell>
+            <TableRow sx={{ bgcolor: '#1976d2' }}>
+              <TableCell sx={{ color: '#fff', fontWeight: 700 }}>ID</TableCell>
+              <TableCell sx={{ color: '#fff', fontWeight: 700 }}>Nom</TableCell>
+              <TableCell sx={{ color: '#fff', fontWeight: 700 }}>Email</TableCell>
+              <TableCell align="right" sx={{ color: '#fff', fontWeight: 700 }}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {customers.map((c) => (
+            {filteredCustomers.map((c) => (
               <TableRow key={c.id}>
                 <TableCell>{c.id}</TableCell>
                 <TableCell>{c.nom}</TableCell>
                 <TableCell>{c.email}</TableCell>
                 <TableCell align="right">
-                  <IconButton color="error" onClick={() => handleDelete(c.id)}><DeleteIcon /></IconButton>
+                  <IconButton color="error" onClick={() => handleDelete(c.id)} aria-label={`Supprimer ${c.nom}`}>
+                    <DeleteIcon />
+                  </IconButton>
                 </TableCell>
               </TableRow>
             ))}
-            {customers.length === 0 && (
+            {filteredCustomers.length === 0 && (
               <TableRow><TableCell colSpan={4} align="center">Aucun client</TableCell></TableRow>
             )}
           </TableBody>
