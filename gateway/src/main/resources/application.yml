@@ -19,4 +19,16 @@ spring:
         - id: order-service
           uri: http://order-service:8083
           predicates:
-            - Path=/api/orders/** 
+            - Path=/api/orders/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:5173"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: true 
