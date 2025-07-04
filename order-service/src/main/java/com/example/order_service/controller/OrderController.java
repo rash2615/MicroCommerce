@@ -5,6 +5,8 @@ import com.example.order_service.dto.Customer;
 import com.example.order_service.dto.OrderWithCustomer;
 import com.example.order_service.entity.Order;
 import com.example.order_service.service.OrderService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,10 +43,15 @@ public class OrderController {
     }
 
     @GetMapping("/{id}/with-customer")
-    public OrderWithCustomer getOrderWithCustomer(@PathVariable Long id) {
+    public ResponseEntity<OrderWithCustomer> getOrderWithCustomer(@PathVariable Long id) {
         Order order = orderService.findById(id).orElse(null);
-        if (order == null) return null;
-        Customer customer = customerClient.getCustomerById(order.getCustomerId());
-        return new OrderWithCustomer(order, customer);
+        if (order == null) return ResponseEntity.notFound().build();
+        try {
+            Customer customer = customerClient.getCustomerById(order.getCustomerId());
+            return ResponseEntity.ok(new OrderWithCustomer(order, customer));
+        } catch (Exception e) {
+            // Optionnel : log l'erreur
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 } 
