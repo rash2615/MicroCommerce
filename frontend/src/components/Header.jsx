@@ -13,10 +13,12 @@ const menu = [
   { text: 'Contact', path: '/contact' },
 ];
 
+// Composant Header : barre de navigation principale du site
 export default function Header() {
   const location = useLocation();
   const [open, setOpen] = useState(false);
 
+  // Header affiche le logo, le menu principal, la recherche et le menu burger sur mobile
   return (
     <AppBar position="sticky" elevation={0} sx={{ bgcolor: 'var(--color-white)', boxShadow: '0 2px 12px 0 rgba(35,35,35,0.06)', py: 0.5, transition: 'var(--transition)' }}>
       <Toolbar sx={{ justifyContent: 'space-between', minHeight: 68, px: { xs: 1, md: 4 } }}>

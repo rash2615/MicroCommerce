@@ -7,9 +7,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-/* Permet de faire des opérations de base sur la table customer */
+/* Service métier pour la gestion des clients */
 @Service
 public class CustomerService {
+    /* Accès aux opérations de base de données sur les clients */
     private final CustomerRepository customerRepository;
 
     /* Injection de dépendance */
@@ -17,22 +18,22 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
-    /* Permet de récupérer tous les customers */
+    /* Récupère tous les clients */
     public List<Customer> findAll() {
         return customerRepository.findAll();
     }
 
-    /* Permet de récupérer un customer par son id */
+    /* Recherche un client par son ID */
     public Optional<Customer> findById(Long id) {
         return customerRepository.findById(id);
     }
 
-    /* Permet de créer un customer */
+    /* Sauvegarde (création ou mise à jour) d'un client */
     public Customer save(Customer customer) {
         return customerRepository.save(customer);
     }
 
-    /* Permet de supprimer un customer */
+    /* Supprime un client par son ID */
     public void delete(Long id) {
         customerRepository.deleteById(id);
     }

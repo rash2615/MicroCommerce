@@ -1,6 +1,8 @@
+// Composant Hero : section d'accroche animée de la landing page
 import React from 'react';
 import { Box, Typography, Button, Grid, Fade, Slide } from '@mui/material';
 
+// Hero met en avant le slogan, l'image principale et le call-to-action
 export default function Hero() {
   return (
     <Box sx={{ width: '100%', bgcolor: 'var(--color-bg)', py: { xs: 6, md: 10 }, px: { xs: 2, md: 8 }, minHeight: { xs: 320, md: 420 } }}>

@@ -1,7 +1,9 @@
+// Composant Footer : pied de page du site avec infos, liens et contact
 import React from 'react';
 import { Box, Typography, Link as MuiLink } from '@mui/material';
 import { Link } from 'react-router-dom';
 
+// Footer affiche les informations de contact, mentions légales, CGV, etc.
 export default function Footer() {
   return (
     <Box component="footer" sx={{ bgcolor: 'var(--color-bg)', color: 'var(--color-black)', py: 3, px: 2, textAlign: 'center', borderTop: '1px solid var(--color-grey)', mt: 8 }}>
